@@ -2,22 +2,12 @@ import weaviate
 from config.config import weaviate_config
 from config.constants import WEAVIATE_BASE_URL, WEAVIATE_API_KEY
 from pydantic import BaseModel
-from enum import Enum
+from services.utils.schema_operation import SchemaOperation, schema_api
+from services.utils.tenant_operation import TenantOperation, tenant_api
+from services.utils.object_operation import ObjectOperation, object_api
+from models.query_params import QueryParams
 
-
-class SchemaOperation(Enum):
-    GET_CLASS = "GET_CLASS"
-    GET_CLASS_BY_NAME = "GET_CLASS_BY_NAME"
-    CREATE_CLASS = "CREATE_CLASS"
-    DELETE_CLASS = "DELETE_CLASS"
-    UPDATE_CLASS = "UPDATE_CLASS"
-    ADD_PROPER = "ADD_PROPER"
-
-
-class TenantOperation(Enum):
-    ADD_TENANTS = "ADD_TENANTS"
-    LIST_TENANTS = "LIST_TENANT"
-    DELETE_TENANTS = "DELETE_TENANTS"
+from .tenant_operation import TenantOperation, tenant_api
 
 
 class WeaviateTemplate(BaseModel):
@@ -34,31 +24,23 @@ class WeaviateTemplate(BaseModel):
 
     async def class_api(self, operation: SchemaOperation,
                         class_name: str = None,
-                        payload: str = None) -> dict:
-
+                        payload: dict = None) -> dict:
+        if operation is None:
+            raise Exception("operation can not be empty.")
         client = self.__build_weaviate_client()
-        if operation == SchemaOperation.GET_CLASS:
-            return client.schema.get()
-        elif operation == SchemaOperation.GET_CLASS_BY_NAME:
-            if class_name is None:
-                raise Exception("Searching schema is failed, The name can not be None")
-            else:
-                return client.schema.get(class_name)
-        elif operation == SchemaOperation.CREATE_CLASS:
-            if payload is None:
-                raise Exception("Creation schema is failed, the payload can not be None")
-            else:
-                return client.schema.create(payload)
-        elif operation == SchemaOperation.UPDATE_CLASS:
-            if payload is None or class_name is None:
-                raise Exception("Updating class is failed, the payload or class name can not be None")
-            else:
-                return client.schema.update_config(class_name, payload)
-        elif operation == SchemaOperation.ADD_PROPER:
-            if payload is None or class_name is None:
-                raise Exception("Updating properties is failed, the payload or class name can not be None")
-            else:
-                return client.schema.property.create(class_name, payload)
+        return await schema_api(weaviate_client=client, operation=operation, class_name=class_name, payload=payload)
+
+    async def tenant_api(self, operation: TenantOperation, class_name: str = None, payload: dict = None):
+        if operation is None:
+            raise Exception("operation can not be empty.")
+        client = self.__build_weaviate_client()
+        return await tenant_api(weaviate_client=client, operation=operation, class_name=class_name, payload=payload)
+
+    async def object_api(self, operation: ObjectOperation, queryParams: QueryParams):
+        if operation is None:
+            raise Exception("operation can not be empty.")
+        client = self.__build_weaviate_client()
+        return await object_api(weaviate_client=client, operation=operation, queryParams=queryParams)
 
 
 if __name__ == '__main__':

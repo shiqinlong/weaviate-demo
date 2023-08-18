@@ -1,14 +1,26 @@
 from fastapi import APIRouter
+from services.utils.weaviate_template import WeaviateTemplate
+from services.utils.tenant_operation import TenantOperation
 
-tenant_api = APIRouter()
-
-
-@tenant_api.get("")
-async def get_all_tenant():
-    return "success"
+tenant_router = APIRouter()
+weaviateTemplate = WeaviateTemplate()
 
 
-@tenant_api.get("/{tenant_id}")
-async def get_tenant_by_name(tenant_id: str):
-    print(f"tenant id: {tenant_id}")
-    return "tenant"
+@tenant_router.get("/{class_name}")
+async def get_all_tenant(class_name: str):
+    result = await weaviateTemplate.tenant_api(operation=TenantOperation.LIST_TENANTS, class_name=class_name)
+    return result
+
+
+@tenant_router.post("/{class_name}", summary="add new tenants to specific class by class name")
+async def get_tenant_by_name(class_name: str, payload: dict):
+    result = await weaviateTemplate.tenant_api(operation=TenantOperation.ADD_TENANTS, class_name=class_name,
+                                               payload=payload)
+    return result
+
+
+@tenant_router.delete("/{class_name}", summary="delete tenants to specific class by class name")
+async def delete_tenants(class_name: str, payload: dict):
+    result = await weaviateTemplate.tenant_api(operation=TenantOperation.DELETE_TENANTS, class_name=class_name,
+                                               payload=payload)
+    return result

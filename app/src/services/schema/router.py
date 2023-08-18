@@ -12,7 +12,7 @@ async def fetch_all_schemas():
 
 @schema_api.get("/{name}")
 async def fetch_schema_by_name(name: str):
-    return await weaviateTemplate.class_api(operation=SchemaOperation.GET_CLASS,
+    return await weaviateTemplate.class_api(operation=SchemaOperation.GET_CLASS_BY_NAME,
                                             class_name=name)
 
 

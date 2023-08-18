@@ -37,24 +37,24 @@ class WeaviateTemplate(BaseModel):
                         payload: str = None) -> dict:
 
         client = self.__build_weaviate_client()
-        if operation.name == SchemaOperation.GET_CLASS.value:
+        if operation == SchemaOperation.GET_CLASS:
             return client.schema.get()
-        elif operation.name == SchemaOperation.GET_CLASS_BY_NAME.name:
+        elif operation == SchemaOperation.GET_CLASS_BY_NAME:
             if class_name is None:
                 raise Exception("Searching schema is failed, The name can not be None")
             else:
                 return client.schema.get(class_name)
-        elif operation.name == SchemaOperation.CREATE_CLASS.name:
+        elif operation == SchemaOperation.CREATE_CLASS:
             if payload is None:
                 raise Exception("Creation schema is failed, the payload can not be None")
             else:
                 return client.schema.create(payload)
-        elif operation.name == SchemaOperation.UPDATE_CLASS.name:
+        elif operation == SchemaOperation.UPDATE_CLASS:
             if payload is None or class_name is None:
                 raise Exception("Updating class is failed, the payload or class name can not be None")
             else:
                 return client.schema.update_config(class_name, payload)
-        elif operation.name == SchemaOperation.ADD_PROPER.name:
+        elif operation == SchemaOperation.ADD_PROPER:
             if payload is None or class_name is None:
                 raise Exception("Updating properties is failed, the payload or class name can not be None")
             else:

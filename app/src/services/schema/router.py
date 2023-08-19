@@ -1,8 +1,8 @@
 import json
 
 from fastapi import APIRouter
-from services.utils.weaviate_template import WeaviateTemplate
-from services.utils.schema_operation import SchemaOperation
+from services.weaviate.weaviate_template import WeaviateTemplate
+from services.weaviate.schema_operation import SchemaOperation
 
 schema_router = APIRouter()
 weaviateTemplate = WeaviateTemplate()

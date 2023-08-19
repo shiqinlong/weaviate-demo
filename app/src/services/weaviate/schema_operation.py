@@ -11,7 +11,7 @@ class SchemaOperation(Enum):
     ADD_PROPER = "ADD_PROPER"
 
 
-async def schema_api(weaviate_client: Client,
+async def schema_call(weaviate_client: Client,
                      operation: SchemaOperation,
                      class_name: str,
                      payload: dict) -> dict:

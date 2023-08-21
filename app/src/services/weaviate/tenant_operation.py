@@ -11,7 +11,7 @@ class TenantOperation(Enum):
     UPDATE_TENANTS = "UPDATE_TENANTS"
 
 
-async def tenant_call(weaviate_client: Client, operation: TenantOperation, class_name: str, payload: List[str]):
+async def tenant_call(weaviate_client: Client, operation: TenantOperation, class_name: str, payload: List[str] = None):
     if operation == TenantOperation.LIST_TENANTS:
         if class_name is None:
             raise Exception("Can not list tenants without class name.")
@@ -27,8 +27,6 @@ async def tenant_call(weaviate_client: Client, operation: TenantOperation, class
             raise Exception("Can not delete tenants with out class name.")
         else:
             return weaviate_client.schema.remove_class_tenants(class_name=class_name, tenants=payload)
-    # if operation == TenantOperation.UPDATE_TENANTS:
-    #     if class_name is None or payload is None:
-    #         raise Exception("Can not update tenants with out class name.")
-    #     else:
-    #         return weaviate_client.schema
+
+# async def isTenantEsit(weaviate_client:Client,class_name:str,tenant:str):
+#     weaviate_client.schema.

@@ -12,9 +12,9 @@ class SchemaOperation(Enum):
 
 
 async def schema_call(weaviate_client: Client,
-                     operation: SchemaOperation,
-                     class_name: str,
-                     payload: dict) -> dict:
+                      operation: SchemaOperation,
+                      class_name: str,
+                      payload: dict) -> dict:
     if operation == SchemaOperation.GET_CLASS:
         return weaviate_client.schema.get()
     elif operation == SchemaOperation.GET_CLASS_BY_NAME:
@@ -42,3 +42,7 @@ async def schema_call(weaviate_client: Client,
             raise Exception("Updating properties is failed, the payload or class name can not be None")
         else:
             return weaviate_client.schema.property.create(class_name, payload)
+
+
+async def isSchemaExists(weaviate_client: Client, class_name: str) -> bool:
+    return weaviate_client.schema.exists(class_name)

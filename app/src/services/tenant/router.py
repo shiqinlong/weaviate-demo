@@ -9,10 +9,7 @@ weaviateTemplate = WeaviateTemplate()
 
 @tenant_router.get("/{class_name}")
 async def get_all_tenant(class_name: str) -> list[str]:
-    if await isSchemaExists(weaviateTemplate.get_weaviate_client(), class_name):
-        return await weaviateTemplate.tenant_api(operation=TenantOperation.LIST_TENANTS, class_name=class_name)
-    else:
-        raise HTTPException(404, "Can not get tenants info  because the class [{}] does not exist.".format(class_name))
+    return await weaviateTemplate.tenant_api(operation=TenantOperation.LIST_TENANTS, class_name=class_name)
 
 
 @tenant_router.post("/{class_name}", summary="add new tenants to specific class by class name")

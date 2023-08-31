@@ -1,0 +1,34 @@
+{
+    "class": "Question",
+    "vectorizer": "text2vec-huggingface",
+    "multiTenancyConfig": {
+        "enabled": true
+      },
+    "moduleConfig": {
+        "text2vec-huggingface": {
+            "model": "sentence-transformers/all-MiniLM-L6-v2",
+            "options": {
+                "waitForModel": "True"
+            }
+        }
+    }
+}
+
+
+
+{"answer":"test"}
+
+
+
+{
+    "class": "Question",
+    "vectorizer": "text2vec-huggingface",
+    "moduleConfig": {
+        "text2vec-huggingface": {
+            "model": "sentence-transformers/all-MiniLM-L6-v2",
+            "options": {
+                "waitForModel": "True"
+            }
+        }
+    }
+}

@@ -26,12 +26,10 @@ async def schema_call(weaviate_client: Client,
         if payload is None:
             raise Exception("Creation schema is failed, the payload can not be None")
         else:
-            return weaviate_client.schema.create(payload)
+            return weaviate_client.schema.create_class(payload)
     elif operation == SchemaOperation.DELETE_CLASS:
-        if payload is None:
-            raise Exception("Deleting schema is failed, the payload can not be None")
-        else:
-            return weaviate_client.schema.delete_class(class_name)
+        return weaviate_client.schema.delete_class(class_name)
+
     elif operation == SchemaOperation.UPDATE_CLASS:
         if payload is None or class_name is None:
             raise Exception("Updating class is failed, the payload or class name can not be None")
